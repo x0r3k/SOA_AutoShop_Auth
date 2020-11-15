@@ -10,4 +10,4 @@ COPY . /usr/src/app
 
 ENV NODE_ENV=docker
 
-CMD ["npm", "start"]
+CMD ["npm", "start:manual"]

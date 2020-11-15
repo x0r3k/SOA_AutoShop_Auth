@@ -1,0 +1,74 @@
+{
+  "development": {
+    "username": "root",
+    "password": "0000",
+    "database": "soa_user",
+    "host": "localhost",
+    "dialect": "mysql",
+    "pool": {
+      "max": 20,
+      "min": 0,
+      "acquire": 60000,
+      "idle": 10000
+    },
+    "reconnect": true,
+    "define": {
+      "timestamps": false,
+      "freezeTableName": true
+    }
+  },
+  "docker": {
+    "username": "root",
+    "password": "0000",
+    "database": "soa_user",
+    "host": "localhost",
+    "dialect": "mysql",
+    "pool": {
+      "max": 20,
+      "min": 0,
+      "acquire": 60000,
+      "idle": 10000
+    },
+    "reconnect": true,
+    "define": {
+      "timestamps": false,
+      "freezeTableName": true
+    }
+  },
+  "test": {
+    "username": "root",
+    "password": "0000",
+    "database": "soa_user_test",
+    "host": "localhost",
+    "dialect": "mysql",
+    "pool": {
+      "max": 20,
+      "min": 0,
+      "acquire": 60000,
+      "idle": 10000
+    },
+    "reconnect": true,
+    "define": {
+      "timestamps": false,
+      "freezeTableName": true
+    }
+  },
+  "production": {
+    "username": "root",
+    "password": "0000",
+    "database": "soa_user_production",
+    "host": "localhost",
+    "dialect": "mysql",
+    "pool": {
+      "max": 20,
+      "min": 0,
+      "acquire": 60000,
+      "idle": 10000
+    },
+    "reconnect": true,
+    "define": {
+      "timestamps": false,
+      "freezeTableName": true
+    }
+  }
+}

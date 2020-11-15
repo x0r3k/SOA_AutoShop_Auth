@@ -1,13 +1,27 @@
 version: '3'
 
 services:
+  db:
+    image: mysql:8.0.19
+    container_name: db_cont
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+        - MYSQL_DATABASE=soa_user
+        - MYSQL_PASSWORD=0000
+        - MYSQL_ROOT_PASSWORD=0000
+        - MYSQL_ALLOW_EMPTY_PASSWORD="yes"
+    ports:
+      - "3380:3306"
   server:
     build:
       context: .
       dockerfile: Dockerfile
+    restart: on-failure
     image: x0r3k/soa_auth_user
     container_name: auth_user_cont
     env_file: .env
+    depends_on:
+        - db
     environment:
       - NODE_ENV=docker
       - HTTP_PORT=8082
@@ -16,4 +30,3 @@ services:
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
-    command: npm start
