@@ -86,7 +86,7 @@ const MAIN_ERROR_CODES = {
     NOT_FOUND: {
         ERROR_CODE: 404,
         HTTP_CODE: 404,
-        MESSAGE: 'NOTHING WAS FOUND',
+        MESSAGE: 'Page not found',
     },
     SYSTEM_ERROR: {
         ERROR_CODE: 500,
