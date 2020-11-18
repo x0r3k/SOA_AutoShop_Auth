@@ -1,22 +1,23 @@
 module.exports = (sequelize, DataType) => {
-  const usersTable = sequelize.define('users', {
-    Id: {
+  const rolesTable = sequelize.define('roles', {
+    id: {
       type: DataType.INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },
-    Name:{
+    roleName: {
       type: DataType.STRING(100),
       allowNull: false,
-      unique: true,
+      unique: true
     },
-    Gender:{
-      type: DataType.ENUM('0', '1'),
+    roleCode: {
+      type: DataType.STRING(15),
       allowNull: false,
-    },
+      unique: true
+    }
   }, {
     freezeTableName: true,
   });
 
-  return usersTable;
+  return rolesTable;
 };

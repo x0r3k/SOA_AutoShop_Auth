@@ -1,5 +1,5 @@
 const createError = require('http-errors');
-const { users, sequelize } = require('../../models');
+const { users, sequelize } = require('../../sequelize/models');
 const { validationResult } = require('express-validator');
 const {formErrorObject, MAIN_ERROR_CODES} = require('../../services/errorHandling')
 
