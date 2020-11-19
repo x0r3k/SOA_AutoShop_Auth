@@ -12,6 +12,8 @@ services:
         - MYSQL_ALLOW_EMPTY_PASSWORD="yes"
     ports:
       - "3380:3306"
+    networks:
+      - app-tier
   server:
     build:
       context: .
@@ -30,3 +32,9 @@ services:
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
+    networks:
+      - app-tier
+
+networks:
+    app-tier:
+        driver: bridge

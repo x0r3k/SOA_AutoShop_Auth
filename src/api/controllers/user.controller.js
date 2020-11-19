@@ -16,6 +16,7 @@ module.exports = {
         userList
       });
     } catch (error) {
+      console.log(error);
       return next(createError(formErrorObject(MAIN_ERROR_CODES.SYSTEM_ERROR, 'Something went wrong, please try again')));
     }
   },
