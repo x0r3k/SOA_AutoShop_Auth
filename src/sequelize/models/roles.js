@@ -19,5 +19,16 @@ module.exports = (sequelize, DataType) => {
     freezeTableName: true,
   });
 
+  rolesTable.associate = (models) => {
+    rolesTable.hasMany(models.userRoles, { as: 'UserRoles', foreignKey: { name: 'fkRoleId', allowNull: false }, foreignKeyConstraint: true });
+    rolesTable.belongsToMany(models.users, {
+      foreignKey: { name: 'fkRoleId', allowNull: false }, 
+      otherKey: { name: 'fkUserId', allowNull: false }, 
+      foreignKeyConstraint: true, 
+      through: models.userRoles,
+    });
+  };
+
+
   return rolesTable;
 };

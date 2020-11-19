@@ -42,5 +42,19 @@ module.exports = (sequelize, DataType) => {
     freezeTableName: true,
   });
 
+  usersTable.associate = (models) => {
+    usersTable.hasMany(models.userRoles, { as: 'UserRoles', foreignKey: { name: 'fkUserId', allowNull: false }, foreignKeyConstraint: true, onDelete: 'cascade'});
+    usersTable.belongsToMany(models.roles, {
+      foreignKey: { name: 'fkUserId', allowNull: false }, 
+      otherKey: { name: 'fkRoleId', allowNull: false }, 
+      foreignKeyConstraint: true, 
+      through: models.userRoles
+    });
+
+    usersTable.hasMany(models.refreshSessions, 
+      { foreignKey: { name: 'fkUserId', allowNull: false }, foreignKeyConstraint: true, onDelete: 'cascade'}
+    );
+  }
+
   return usersTable;
 };

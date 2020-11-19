@@ -8,7 +8,7 @@ module.exports = (sequelize, DataType) => {
     fkUserId: {
       type: DataType.STRING(100),
       allowNull: false,
-      unique: true
+      unique: true,
     },
     fkRoleId: {
       type: DataType.STRING(15),
@@ -24,6 +24,10 @@ module.exports = (sequelize, DataType) => {
       },
     ],
   });
+  userRolesTable.associate = (models) => {
+    userRolesTable.belongsTo(models.users, { foreignKey: { name: 'fkUserId', allowNull: false }, foreignKeyConstraint: true });
+    userRolesTable.belongsTo(models.roles, { foreignKey: { name: 'fkRoleId', allowNull: false }, foreignKeyConstraint: true });
+  };
 
   return userRolesTable;
 };

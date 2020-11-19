@@ -77,6 +77,11 @@ const MAIN_ERROR_CODES = {
         HTTP_CODE: 400,
         MESSAGE: 'Not subscribed or subscription expired'
     },
+    DATABASE_ERROR: {
+        ERROR_CODE: 240,
+        HTTP_CODE: 400,
+        MESSAGE: 'Database logic error'
+    },
 
     FORBIDDEN: {
         ERROR_CODE: 403,
