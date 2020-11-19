@@ -3,7 +3,7 @@ version: '3'
 services:
   db:
     image: mysql:8.0.19
-    container_name: db_cont
+    container_name: auth_user_DBC
     command: --default-authentication-plugin=mysql_native_password
     environment:
         - MYSQL_DATABASE=soa_user
@@ -17,8 +17,8 @@ services:
       context: .
       dockerfile: Dockerfile
     restart: on-failure
-    image: x0r3k/soa_auth_user
-    container_name: auth_user_cont
+    image: soa_auth_user
+    container_name: auth_user_SC
     env_file: .env
     depends_on:
         - db
