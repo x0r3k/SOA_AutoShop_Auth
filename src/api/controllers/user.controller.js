@@ -1,5 +1,5 @@
 const createError = require('http-errors');
-const { users, sequelize } = require('../../sequelize/models');
+const { users, userRoles, roles, sequelize } = require('../../sequelize/models');
 const { validationResult } = require('express-validator');
 const {formErrorObject, MAIN_ERROR_CODES} = require('../../services/errorHandling')
 
@@ -55,6 +55,79 @@ module.exports = {
       return res.status(204).end();
     } catch (error) {
       console.log(error);
+      return next(createError(formErrorObject(MAIN_ERROR_CODES.SYSTEM_ERROR, 'Something went wrong, please try again')));
+    }
+  },
+
+  updateUser: async (req, res, next) => {
+    const transaction = await sequelize.transaction();
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return next(createError(formErrorObject(MAIN_ERROR_CODES.VALIDATION_BODY, 'Invalid request params', errors.errors)));
+      }
+      const { userId } = req.params;
+      const { name, lastname, gender, birthdate, city, role } = req.body;
+      const foundedUser = await users.findByPk(userId);
+      if(!foundedUser) {
+        await transaction.rollback();
+        return next(createError(formErrorObject(MAIN_ERROR_CODES.ELEMENT_NOT_FOUND, 'User not found')));
+      }
+      
+      let userRolesData = [];
+      
+      const fullname = `${name || foundedUser.name} ${lastname || foundedUser.lastname}`;
+      await users.update({
+        name,
+        lastname,
+        fullname,
+        gender,
+        birthdate,
+        city,
+      },{
+        where: {
+          id: userId
+        },
+        transaction
+      });
+
+      if(role) {
+        userRolesData = role.map(item => ({fkUserId: userId, fkRoleId: item}));
+        await userRoles.destroy({
+          where: {
+            fkUserId: userId,
+          }
+        });
+
+        await userRoles.bulkCreate(
+          userRolesData, 
+          {
+            fields: ['fkUserId', 'fkRoleId'],
+            transaction
+          }
+        );
+  
+      }
+      
+      await transaction.commit();
+
+      const updatedUser = await users.findOne({
+        where: { id: userId },
+        include: {
+          model: roles,
+          through: {
+            model: userRoles,
+            attributes: [],
+          },
+        },
+      });
+
+      
+      return res.status(200).json({ updatedUser });
+      
+    } catch (error) {
+      console.log(error);
+      await transaction.rollback();
       return next(createError(formErrorObject(MAIN_ERROR_CODES.SYSTEM_ERROR, 'Something went wrong, please try again')));
     }
   }

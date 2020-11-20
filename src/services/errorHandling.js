@@ -82,6 +82,11 @@ const MAIN_ERROR_CODES = {
         HTTP_CODE: 400,
         MESSAGE: 'Database logic error'
     },
+    REQUEST_ERROR: {
+        ERROR_CODE: 250,
+        HTTP_CODE: 400,
+        MESSAGE: 'Wrong JSON format'
+    },
 
     FORBIDDEN: {
         ERROR_CODE: 403,
@@ -114,7 +119,16 @@ function formErrorObject(errorObj, message, details) {
 }
 
 function errorHandling(error, req, res, next) {
-    if (!error.errorObj || !error.errorObj.ERROR_CODE || !error.errorObj.HTTP_CODE) {
+    if (error instanceof SyntaxError) {
+        res.status(400);
+        res.json({
+            code: '250',
+            message: error.message,
+            details: {
+                stack: error.stack
+            }
+        });
+    } else if (!error.errorObj || !error.errorObj.ERROR_CODE || !error.errorObj.HTTP_CODE) {
         res.status(500);
         res.json({
             code: '888',
