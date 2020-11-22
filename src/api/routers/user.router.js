@@ -1,5 +1,6 @@
 const router = require('express').Router();
-const { getUsers, getUser, deleteUser, updateUser, createUser } = require('../controllers/user.controller');
+const { getAccountInfo, deleteAccount, updateAccountInfo } = require('../controllers/user.controller');
+const { authUser } = require('../../middlewares/auth.middleware');
 const { 
   param_User_Id, 
   body_User_Name, 
@@ -12,55 +13,29 @@ const {
   body_User_Password,
 } = require('../../services/apiValidations');
 
-
 router.get(
-  '/getUsers', 
-  getUsers
-);
-
-router.get(
-  '/getUser/:userId',
-  [ 
-    param_User_Id()
-  ],
-  getUser
+  '/getAccountInfo',
+  authUser,
+  getAccountInfo
 );
 
 router.delete(
-  '/deleteUser/:userId',
-  [ 
-    param_User_Id()
-  ],
-  deleteUser
+  '/deleteAccount',
+  authUser,
+  deleteAccount
 );
 
 router.put(
-  '/updateUser/:userId',
+  '/updateAccountInfo',
   [
-    param_User_Id(),
     body_User_Name(false),
     body_User_Lastname(false),
     body_User_Gender(false),
     body_User_Birthdate(false),
-    body_User_City(false),
-    body_User_Role(false)
+    body_User_City(false)
   ],
-  updateUser
+  authUser,
+  updateAccountInfo
 );
-
-router.post(
-  '/createUser',
-  [
-    body_User_Email(true),
-    body_User_Password(true),
-    body_User_Name(true),
-    body_User_Lastname(true),
-    body_User_Gender(true),
-    body_User_Birthdate(true),
-    body_User_City(true),
-    body_User_Role(true)
-  ],
-  createUser
-)
 
 module.exports = router;

@@ -5,7 +5,8 @@ const http = require('http');
 const express = require('express');
 const bodyParser = require('body-parser');
 const createError = require('http-errors');
-const adminUserRouter = require('./src/api/routers/user.router');
+const adminUserRouter = require('./src/api/routers/admin.user.router');
+const userRouter = require('./src/api/routers/user.router');
 const authRouter = require('./src/api/routers/auth.router');
 const { formErrorObject, errorHandling, MAIN_ERROR_CODES } = require('./src/services/errorHandling');
 
@@ -19,7 +20,8 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use('/api/user', adminUserRouter);
+app.use('/api/admin/user', adminUserRouter);
+app.use('/api/user', userRouter);
 app.use('/api/auth', authRouter);
 
 app.use('*', (req, res, next) => {
