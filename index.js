@@ -5,7 +5,7 @@ const http = require('http');
 const express = require('express');
 const bodyParser = require('body-parser');
 const createError = require('http-errors');
-const adminUserRouter = require('./src/api/routers/admin.user.router');
+const adminUserRouter = require('./src/api/routers/user.router');
 const authRouter = require('./src/api/routers/auth.router');
 const { formErrorObject, errorHandling, MAIN_ERROR_CODES } = require('./src/services/errorHandling');
 
@@ -14,12 +14,12 @@ const httpServer = http.createServer(app);
 
 const HTTP_PORT = process.env.HTTP_PORT;
 
-
+app.set('trust proxy', true);
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use('/api/admin/user', adminUserRouter);
+app.use('/api/user', adminUserRouter);
 app.use('/api/auth', authRouter);
 
 app.use('*', (req, res, next) => {

@@ -12,12 +12,7 @@ const MAIN_ERROR_CODES = {
   UNAUTHORIZED: {
     ERROR_CODE: 110,
     HTTP_CODE: 401,
-    MESSAGE: 'Session key does not recognized',
-  },
-  SESSION_KEY_REQUIRED: {
-    ERROR_CODE: 111,
-    HTTP_CODE: 400,
-    MESSAGE: 'Session key is required',
+    MESSAGE: 'Token error',
   },
 
   ELEMENT_NOT_FOUND: {
@@ -86,6 +81,16 @@ const MAIN_ERROR_CODES = {
     ERROR_CODE: 250,
     HTTP_CODE: 400,
     MESSAGE: 'Wrong JSON format'
+  },
+  TOKEN_ERROR: {
+    ERROR_CODE: 260,
+    HTTP_CODE: 401,
+    MESSAGE: 'Token error',
+  },
+  SESSION_ERROR: {
+    ERROR_CODE: 270,
+    HTTP_CODE: 401,
+    MESSAGE: 'Session error',
   },
 
   FORBIDDEN: {

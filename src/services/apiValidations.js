@@ -71,7 +71,16 @@ module.exports = {
       .custom((value, { req }) => {
         return value !== req.body.password ? false : true
       }).withMessage('ConfirmationPassword and Password are not equal');
-
+  },
+  body_UserSessions_Fingerprint: () => {
+    return check('fingerprint').exists().withMessage('Is required').bail()
+      .notEmpty().withMessage('Should not be empty').bail()
+      .isString().withMessage('Should be string');
+  },
+  body_UserSessions_RefreshToken: () => {
+    return check('refreshToken').exists().withMessage('Is required').bail()
+      .notEmpty().withMessage('Should not be empty').bail()
+      .isString().withMessage('Should be string');
   }
 }
 

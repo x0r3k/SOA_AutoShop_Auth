@@ -31,15 +31,15 @@ module.exports = {
         type: Sequelize.TEXT,
         allowNull: false,
       },
-      ip: {
-        type: Sequelize.STRING(15),
-        allowNull: false,
-      },
       expiresIn: {
         type: Sequelize.BIGINT,
         allowNull: false,
       },
       createdAt: {
+        type: Sequelize.BIGINT,
+        allowNull: false,
+      },
+      updatedAt: {
         type: Sequelize.BIGINT,
         allowNull: false,
       }

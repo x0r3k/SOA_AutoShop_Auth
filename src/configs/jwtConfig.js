@@ -5,10 +5,12 @@ module.exports = {
         access: {
           type: 'access',
           expiresIn: '1h',
+          expiresInMs: 3600000
         },
         refresh: {
           type: 'refresh',
           expiresIn: '30d',
+          expiresInMs: 2592000000
         },
       },
     },

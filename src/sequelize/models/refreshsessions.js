@@ -23,15 +23,15 @@ module.exports = (sequelize, DataType) => {
       type: DataType.TEXT,
       allowNull: false,
     },
-    ip: {
-      type: DataType.STRING(15),
-      allowNull: false,
-    },
     expiresIn: {
       type: DataType.BIGINT,
       allowNull: false,
     },
     createdAt: {
+      type: DataType.BIGINT,
+      allowNull: false,
+    },
+    updatedAt: {
       type: DataType.BIGINT,
       allowNull: false,
     }
