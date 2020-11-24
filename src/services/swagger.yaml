@@ -1,0 +1,1163 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Autoshop
+  description: |-
+    ## Autoshop API Description
+
+    ## Table of error codes
+
+    | **Internal Code**| **MNEMO** | **HTTP Code** |**Description**|
+    | ------ | ------ | ------ | ------ |
+    | **100**| BAD_REQUEST_BODY| 400 | Request body parameter error |
+    | **101**| VALIDATION_BODY| 400 | Request body parameter value is invalid or is missed|
+    | | | | |
+    | **110**| UNAUTHORIZED| 401 | Session key does not recognized in DB|
+    | **111**| SESSION_KEY_REQUIRED| 400 | Session key does not passed to request|
+    | | | | |
+    | **151**| ELEMENT_NOT_FOUND| 400 | Element not found in DB|
+    | **152**| ELEMENT_IN_USE| 400 | Cannot do something with element because it is still in use|
+    | **153**| ELEMENT_EXISTS| 400 | Cannot use or create something because it is already exists|
+    | **154**| IS_ENDED| 400 | Course is ended or video is watched|
+    | **155**| UNAVAILABLE| 400 | Element is unavailable and cannot be get or used because of something|
+    | **156**| ELEMENT_NOT_SET| 400 | Element does not set or element does not have something set|
+    | **157**| ELEMENT_ALREADY_DONE| 400 | Something with the element has been done and it cannot be done again|
+    | | | | |
+    | **200**| CREDENTIAL_ERROR| 400 | Username or password are invalid |
+    | **210**| FILE_ERROR| 400 | File extension is not valid or not supported |
+    | **220**| NOTIFICATION_ERROR| 400 | Notification error |
+    | **230**| SUBSCRIPTION_ERROR| 400 | Subscription error |
+    | | | | |
+    | **403**| FORBIDDEN| 403 | Forbidden content |
+    | **404**| NOT_FOUND| 404 | Page not found |
+    | **500**| SYSTEM_ERROR| 500 | Handled but not identified system error |
+    | **999**| UNHANDLED_ERROR| 501 | Unhandled error |
+
+tags:
+- name: User
+  description: API for admin actions
+- name: Admin Users
+  description: API for Admin CRUD Users
+- name: Auth
+  description: API for authorization flow
+#Keywords: API APIs List 
+paths:
+#Keywords: Account APIs
+  "/auth/register":
+    post:
+      tags:
+        - Auth
+      summary: Register in system
+      description: Create own account
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                email:
+                  type: string
+                  example: 'user@mail.com'
+                password: 
+                  type: string
+                  example: 'password'
+                passwordConfirm:
+                  type: string
+                  example: 'password'
+                name:
+                  type: string
+                  example: 'name'
+                lastname: 
+                  type: string
+                  example: 'name'
+                gender: 
+                  type: string
+                  enum: ['M', 'F', 'NB']
+                birthdate: 
+                  type: number
+                  example: 126476378
+                city: 
+                  type: string
+                  example: 'Kharkiv'
+                role: 
+                  type: array
+                  items:
+                    type: number
+                    example: 1
+              required:
+                - email
+                - password
+                - passwordConfirm
+                - name
+                - gender
+                - birthdate
+                - city
+                - role
+      responses:
+        '200':
+          content: 
+            application/json: 
+              schema: 
+                type: object
+                properties: 
+                  createdUser:
+                    $ref: "#/components/schemas/User"
+        '400': 
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ValidationError'
+                  - $ref: '#/components/responses/Error400_101'
+                  - $ref: '#/components/responses/Error400_151'
+        '500':
+          $ref: '#/components/responses/Error500'
+
+  "/auth/authorization":
+    post:
+      tags:
+        - Auth
+      summary: Auth in system
+      description: Authorize in system
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                username:
+                  type: string
+                  example: 'user@mail.com'
+                password: 
+                  type: string
+                  example: 'password'
+                language:
+                  $ref: '#/components/schemas/Language'
+                token: 
+                  type: string
+                  example: 'rkgokre433kvfd223...'
+                timezonespan:
+                  $ref: '#/components/schemas/TimeZoneSpan'
+              required:
+                - username
+                - password
+      responses:
+        '200':
+          content: 
+            application/json: 
+              schema: 
+                type: object
+                properties: 
+                  foundedUser:
+                    $ref: "#/components/schemas/User"
+                  sessionkey:
+                    $ref: "#/components/schemas/Session"
+        '400': 
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ValidationError'
+                  - $ref: '#/components/responses/Error400_151'
+                  - $ref: '#/components/responses/Error400_200'
+        '500':
+          $ref: '#/components/responses/Error500'
+  "/auth/updateTokens":
+    put:
+      tags:
+        - Auth
+      summary: Update tokens
+      description: Authorize in system
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                username:
+                  type: string
+                  example: 'user@mail.com'
+                password: 
+                  type: string
+                  example: 'password'
+                language:
+                  $ref: '#/components/schemas/Language'
+                token: 
+                  type: string
+                  example: 'rkgokre433kvfd223...'
+                timezonespan:
+                  $ref: '#/components/schemas/TimeZoneSpan'
+              required:
+                - username
+                - password
+      responses:
+        '200':
+          content: 
+            application/json: 
+              schema: 
+                type: object
+                properties: 
+                  foundedUser:
+                    $ref: "#/components/schemas/User"
+                  sessionkey:
+                    $ref: "#/components/schemas/Session"
+        '400': 
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ValidationError'
+                  - $ref: '#/components/responses/Error400_151'
+                  - $ref: '#/components/responses/Error400_200'
+        '500':
+          $ref: '#/components/responses/Error500'
+  
+
+
+
+  "/admin/users":
+    get:
+      tags:
+        - Admin Users
+      summary: Get Users list
+      description: Get list of all users
+      parameters:
+        - in: query
+          name: sessionkey
+          description: User's sessionkey
+          required: true
+          schema:
+            type: string
+            example: "4343-fd3224-fd3223-dg232"
+        - in: query
+          name: offset
+          description: Number of rows to skip
+          required: true
+          schema:
+            type: number
+            example: 10
+        - in: query
+          name: limit
+          description: Number of rows to return
+          required: true
+          schema:
+            type: number
+            example: 10
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'List of users retrieved successfully'
+                  userList:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/AdminUser'      
+        '400': 
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ValidationError'
+                  - $ref: '#/components/responses/Error400_111'
+        '401':
+          $ref: '#/components/responses/Error401_110'
+        '500':
+          $ref: '#/components/responses/Error500'
+    post:
+      tags:
+        - Admin Users
+      summary: Create user
+      description: Create new user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                sessionkey:
+                  type: string
+                  example: '14gfdsgf-12435ds-gfdsg234'
+                Username:
+                  type: string
+                  example: 'user@mail.com'
+                Password:
+                  type: string
+                  example: 'secretpaswword123321'
+                Name:
+                  type: string
+                  example: 'John Doe'
+                Gender:
+                  $ref: '#/components/schemas/Gender'
+                SkinType:
+                  $ref: '#/components/schemas/SkinType'
+                IsSport:
+                  type: boolean
+                  example: true
+                IsSmoke:
+                  type: boolean
+                  example: true
+                DateOfBirth:
+                  type: number
+                  example: 631141200000
+                Holidays:
+                  $ref: '#/components/schemas/Holidays'
+                TimeZoneSpan:
+                  $ref: '#/components/schemas/TimeZoneSpan'
+                Course:
+                  type: number
+                  example: 1
+                Language:
+                  $ref: '#/components/schemas/Language'
+                Role:
+                  $ref: '#/components/schemas/Role'
+              required:
+                - sessionkey
+                - Username
+                - Password
+                - Name
+                - Gender
+                - SkinType
+                - IsSport
+                - IsSmoke
+                - DateOfBirth
+                - TimeZoneSpan
+                - Language
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'User successfully created'
+                  newUser:
+                    $ref: '#/components/schemas/AdminUser'  
+        '400': 
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ValidationError'
+                  - $ref: '#/components/responses/Error400_111'
+                  - $ref: '#/components/responses/Error400_153'
+        '401':
+          $ref: '#/components/responses/Error401_110'
+        '500':
+          $ref: '#/components/responses/Error500'
+  "/admin/user/{userId}":
+    get:
+      tags:
+        - Admin Users
+      summary: Get Users by ID
+      description: Get Users by ID
+      parameters:
+        - in: query
+          name: sessionkey
+          description: User's sessionkey
+          required: true
+          schema:
+            type: string
+            example: "4343-fd3224-fd3223-dg232"
+        - in: path
+          name: userId
+          description: User ID
+          required: true
+          schema:
+            type: number
+            example: 1
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'List of users retrieved successfully'
+                  foundedUser:
+                    $ref: '#/components/schemas/AdminUser'      
+        '400': 
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ValidationError'
+                  - $ref: '#/components/responses/Error400_111'
+                  - $ref: '#/components/responses/Error400_151'
+        '401':
+          $ref: '#/components/responses/Error401_110'
+        '500':
+          $ref: '#/components/responses/Error500'
+    put:
+      tags:
+        - Admin Users
+      summary: Update Users by ID
+      description: Update fields of specific user by its ID
+      parameters:
+        - in: path
+          name: userId
+          description: User ID
+          required: true
+          schema:
+            type: number
+            example: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                sessionkey:
+                  type: string
+                  example: '14gfdsgf-12435ds-gfdsg234'
+                Username: 
+                  type: string
+                  example: 'test@mail.com'
+                Name:
+                  type: string
+                  example: 'User name'
+                Gender:
+                  $ref: '#/components/schemas/Gender'
+                SkinType:
+                  $ref: '#/components/schemas/SkinType'
+                IsSport:
+                  type: boolean
+                  example: true
+                IsSmoke:
+                  type: boolean
+                  example: true
+                DateOfBirth:
+                  type: number
+                  example: 123456789000
+                Holidays: 
+                  $ref: '#/components/schemas/Holidays'
+                TimeZoneSpan:
+                  $ref: '#/components/schemas/TimeZoneSpan'
+                Language:
+                  $ref: '#/components/schemas/Language'
+                Role:
+                  $ref: '#/components/schemas/Role'
+              required:
+                - sessionkey
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'User successfully updated'
+                  user:
+                    $ref: '#/components/schemas/AdminUser'                
+        '400': 
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ValidationError'
+                  - $ref: '#/components/responses/Error400_111'
+                  - $ref: '#/components/responses/Error400_151'
+        '401':
+          $ref: '#/components/responses/Error401_110'
+        '500':
+          $ref: '#/components/responses/Error500'
+    delete:
+      tags:
+        - Admin Users
+      summary: Delete User by ID
+      description: Delete specific user by its ID
+      parameters:
+        - in: path
+          name: userId
+          description: User ID
+          required: true
+          schema:
+            type: number
+            example: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sessionkey:
+                  type: string
+                  example: '14gfdsgf-12435ds-gfdsg234'
+      responses:
+        '204':
+          $ref: '#/components/responses/Success204'              
+        '400': 
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ValidationError'
+                  - $ref: '#/components/responses/Error400_111'
+                  - $ref: '#/components/responses/Error400_151'
+        '401':
+          $ref: '#/components/responses/Error401_110'
+        '500':
+          $ref: '#/components/responses/Error500'
+  
+
+  "/admin/users":
+    get:
+      tags:
+        - Admin Users
+      summary: Get Users list
+      description: Get list of all users
+      parameters:
+        - in: query
+          name: sessionkey
+          description: User's sessionkey
+          required: true
+          schema:
+            type: string
+            example: "4343-fd3224-fd3223-dg232"
+        - in: query
+          name: offset
+          description: Number of rows to skip
+          required: true
+          schema:
+            type: number
+            example: 10
+        - in: query
+          name: limit
+          description: Number of rows to return
+          required: true
+          schema:
+            type: number
+            example: 10
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'List of users retrieved successfully'
+                  userList:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/AdminUser'      
+        '400': 
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ValidationError'
+                  - $ref: '#/components/responses/Error400_111'
+        '401':
+          $ref: '#/components/responses/Error401_110'
+        '500':
+          $ref: '#/components/responses/Error500'
+    post:
+      tags:
+        - Admin Users
+      summary: Create user
+      description: Create new user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                sessionkey:
+                  type: string
+                  example: '14gfdsgf-12435ds-gfdsg234'
+                Username:
+                  type: string
+                  example: 'user@mail.com'
+                Password:
+                  type: string
+                  example: 'secretpaswword123321'
+                Name:
+                  type: string
+                  example: 'John Doe'
+                Gender:
+                  $ref: '#/components/schemas/Gender'
+                SkinType:
+                  $ref: '#/components/schemas/SkinType'
+                IsSport:
+                  type: boolean
+                  example: true
+                IsSmoke:
+                  type: boolean
+                  example: true
+                DateOfBirth:
+                  type: number
+                  example: 631141200000
+                Holidays:
+                  $ref: '#/components/schemas/Holidays'
+                TimeZoneSpan:
+                  $ref: '#/components/schemas/TimeZoneSpan'
+                Course:
+                  type: number
+                  example: 1
+                Language:
+                  $ref: '#/components/schemas/Language'
+                Role:
+                  $ref: '#/components/schemas/Role'
+              required:
+                - sessionkey
+                - Username
+                - Password
+                - Name
+                - Gender
+                - SkinType
+                - IsSport
+                - IsSmoke
+                - DateOfBirth
+                - TimeZoneSpan
+                - Language
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'User successfully created'
+                  newUser:
+                    $ref: '#/components/schemas/AdminUser'  
+        '400': 
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ValidationError'
+                  - $ref: '#/components/responses/Error400_111'
+                  - $ref: '#/components/responses/Error400_153'
+        '401':
+          $ref: '#/components/responses/Error401_110'
+        '500':
+          $ref: '#/components/responses/Error500'
+
+
+  "/user/getAccountInfo":
+    get:
+      tags:
+        - User
+      summary: Get own account info
+      description: Get Users by ID
+      parameters:
+        - in: query
+          name: sessionkey
+          description: User's sessionkey
+          required: true
+          schema:
+            type: string
+            example: "4343-fd3224-fd3223-dg232"
+        - in: path
+          name: userId
+          description: User ID
+          required: true
+          schema:
+            type: number
+            example: 1
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'List of users retrieved successfully'
+                  foundedUser:
+                    $ref: '#/components/schemas/AdminUser'      
+        '400': 
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ValidationError'
+                  - $ref: '#/components/responses/Error400_111'
+                  - $ref: '#/components/responses/Error400_151'
+        '401':
+          $ref: '#/components/responses/Error401_110'
+        '500':
+          $ref: '#/components/responses/Error500'
+  
+  "/user/updateAccountInfo":
+    put:
+      tags:
+        - User
+      summary: Update own account
+      description: Update own account
+      parameters:
+        - in: path
+          name: userId
+          description: User ID
+          required: true
+          schema:
+            type: number
+            example: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                sessionkey:
+                  type: string
+                  example: '14gfdsgf-12435ds-gfdsg234'
+                Username: 
+                  type: string
+                  example: 'test@mail.com'
+                Name:
+                  type: string
+                  example: 'User name'
+                Gender:
+                  $ref: '#/components/schemas/Gender'
+                SkinType:
+                  $ref: '#/components/schemas/SkinType'
+                IsSport:
+                  type: boolean
+                  example: true
+                IsSmoke:
+                  type: boolean
+                  example: true
+                DateOfBirth:
+                  type: number
+                  example: 123456789000
+                Holidays: 
+                  $ref: '#/components/schemas/Holidays'
+                TimeZoneSpan:
+                  $ref: '#/components/schemas/TimeZoneSpan'
+                Language:
+                  $ref: '#/components/schemas/Language'
+                Role:
+                  $ref: '#/components/schemas/Role'
+              required:
+                - sessionkey
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'User successfully updated'
+                  user:
+                    $ref: '#/components/schemas/AdminUser'                
+        '400': 
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ValidationError'
+                  - $ref: '#/components/responses/Error400_111'
+                  - $ref: '#/components/responses/Error400_151'
+        '401':
+          $ref: '#/components/responses/Error401_110'
+        '500':
+          $ref: '#/components/responses/Error500'
+
+  "/user/deleteAccount":
+    delete:
+      tags:
+        - User
+      summary: Delete own account
+      description: Delete own account
+      parameters:
+        - in: path
+          name: userId
+          description: User ID
+          required: true
+          schema:
+            type: number
+            example: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sessionkey:
+                  type: string
+                  example: '14gfdsgf-12435ds-gfdsg234'
+      responses:
+        '204':
+          $ref: '#/components/responses/Success204'              
+        '400': 
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ValidationError'
+                  - $ref: '#/components/responses/Error400_111'
+                  - $ref: '#/components/responses/Error400_151'
+        '401':
+          $ref: '#/components/responses/Error401_110'
+        '500':
+          $ref: '#/components/responses/Error500'
+components:
+  schemas:
+    #Error schemas
+
+    #Successful schemas
+    Gender: 
+      type: number
+      enum: [0, 1]
+    Role: 
+      type: number
+      enum: [0, 1]
+    User: 
+      type: object
+      properties:
+        email:
+          example: 'user@mail.com'
+          type: string
+        password: 
+          type: string
+          example: 'password'
+        passwordConfirm:
+          type: string
+          example: 'password'
+        name:
+          type: string
+          example: 'name'
+        lastname: 
+          type: string
+          example: 'name'
+        gender: 
+          type: string
+          enum: ['M', 'F', 'NB']
+        birthdate: 
+          type: number
+          example: 126476378
+        city: 
+          type: string
+          example: 'Kharkiv'
+        role: 
+          type: array
+          items:
+            type: number
+            example: 1
+    ValidationError:
+      type: object
+      properties:
+        code:
+          type: number
+          value: 101
+        message:
+          type: string
+          example: "Invalid fields"
+        details:
+          type: array
+          items:
+            properties:
+              value:
+                type: string
+                example: 'testpassword'
+              message:
+                type: string
+                example: 'required field'
+              param:
+                type: string
+                example: 'password'
+              location:
+                type: string
+                example: 'body'
+
+
+  responses:
+    #Error responses
+    Error400_100:
+      description: BAD_REQUEST_BODY
+      type: object
+      properties:
+        code:
+          type: number
+          enum: [100]
+        message:
+          type: string
+          example: "Request body parameter error"
+    Error400_101:
+      description: VALIDATION_BODY
+      type: object
+      properties:
+        code:
+          type: number
+          enum: [101]
+        message:
+          type: string
+          example: "Request body parameter value is invalid or is missed"
+    Error401_110:
+      description: UNAUTHORIZED
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: number
+                enum: [110]
+              message:
+                type: string
+                example: "Session key does not recognized in DB"
+    Error400_111:
+      description: SESSION_KEY_REQUIRED
+      type: object
+      properties:
+        code:
+          type: number
+          enum: [111]
+        message:
+          type: string
+          example: "Session key does not passed to request"
+    Error400_151:
+      description: ELEMENT_NOT_FOUND
+      type: object
+      properties:
+        code:
+          type: number
+          enum: [151]
+        message:
+          type: string
+          example: "Element not found in DB"
+    Error400_152:
+      description: ELEMENT_IN_USE
+      type: object
+      properties:
+        code:
+          type: number
+          enum: [152]
+        message:
+          type: string
+          example: "Cannot do something with element because it is still in use"
+    Error400_153:
+      description: ELEMENT_EXISTS
+      type: object
+      properties:
+        code:
+          type: number
+          enum: [153]
+        message:
+          type: string
+          example: "Cannot use or create something because it is already exists"
+    Error400_154:
+      description: IS_ENDED
+      type: object
+      properties:
+        code:
+          type: number
+          enum: [154]
+        message:
+          type: string
+          example: "Course is ended or video is watched"
+    Error400_155:
+      description: UNAVAILABLE
+      type: object
+      properties:
+        code:
+          type: number
+          enum: [155]
+        message:
+          type: string
+          example: "Element is unavailable and cannot be get or used because of something"
+    Error400_156:
+      description: ELEMENT_NOT_SET
+      type: object
+      properties:
+        code:
+          type: number
+          example: [156]
+        message:
+          type: string
+          example: "Element does not set or element does not have something set"
+    Error400_157:
+      description: ELEMENT_ALREADY_DONE
+      type: object
+      properties:
+        code:
+          type: number
+          enum: [157]
+        message:
+          type: string
+          example: "Something with the element has been done and it cannot be done again"
+    Error400_200:
+      description: CREDENTIAL_ERROR
+      type: object
+      properties:
+        code:
+          type: number
+          enum: [200]
+        message:
+          type: string
+          example: "Username or password are invalid"
+    Error400_210:
+      description: FILE_ERROR
+      type: object
+      properties:
+        code:
+          type: number
+          enum: [210]
+        message:
+          type: string
+          example: "File extension is not valid or not supported"
+    Error400_220:
+      description: NOTIFICATION_ERROR
+      type: object
+      properties:
+        code:
+          type: number
+          enum: [220]
+        message:
+          type: string
+          example: "Notification error"
+    Error400_230:
+      description: SUBSCRIPTION_ERROR
+      type: object
+      properties:
+        code:
+          type: number
+          enum: [230]
+        message:
+          type: string
+          example: "Subscription error"
+    Error400_230:
+      description: SUBSCRIPTION_ERROR
+      type: object
+      properties:
+        code:
+          type: number
+          enum: [230]
+        message:
+          type: string
+          example: "Subscription error"
+    Error403:
+      description: FORBIDDEN
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: number
+                enum: [403]
+              message:
+                type: string
+                example: "Forbidden content"
+    Error404:
+      description: NOT_FOUND
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: number
+                enum: [404]
+              message:
+                type: string
+                example: "Page not found"
+    Error500:
+      description: SYSTEM_ERROR
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: number
+                enum: [500]
+              message:
+                type: string
+                example: "Handled but not identified system error"
+    Error501:
+      description: UNHANDLED_ERROR
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: number
+                example: [999]
+              message:
+                type: string
+                example: "Unandled error"
+    ValidationError:
+      description: Validation Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationError'
+
+    
+    #Successfull responses
+    Success201:
+      description: Created
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: 'Success'
+    Success204: 
+      description: Success
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: 'Success'
+    UserWithCourse:
+      description: User with Course
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UserWithCourse'
+    User:
+      description: User
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/User'
+    SessionKey:
+      description: Session Key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/SessionKey'
+    VideoDescription:
+      description: Video description
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/VideoDescription'
+    Greeting:
+      description: Greeting
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Greeting'
