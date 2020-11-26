@@ -210,13 +210,11 @@ module.exports = {
     }
   },
 
-  test: (req, res) => {
+  checkToken: async (req, res, next) => {
     try {
-      getTokens({});
-      return res.status(200).end();
+      if(req.user) return res.status(200).json({ user: req.user });
     } catch (error) {
-      console.log(error);
       return next(createError(formErrorObject(MAIN_ERROR_CODES.SYSTEM_ERROR, 'Something went wrong, please try again')));
     }
-  }
+  },
 }

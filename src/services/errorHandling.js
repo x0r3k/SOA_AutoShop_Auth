@@ -130,6 +130,7 @@ function errorHandling(error, req, res, next) {
       }
     });
   } else if (!error.errorObj || !error.errorObj.ERROR_CODE || !error.errorObj.HTTP_CODE) {
+    console.log(error);
     res.status(500);
     res.json({
       code: '888',

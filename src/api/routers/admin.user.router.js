@@ -11,10 +11,13 @@ const {
   body_User_Email,
   body_User_Password,
 } = require('../../services/apiValidations');
+const { authUser, authRole } = require('../../middlewares/auth.middleware');
 
 
 router.get(
   '/getUsers', 
+  authUser,
+  authRole([3]),
   getUsers
 );
 

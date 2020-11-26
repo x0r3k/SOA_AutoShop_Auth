@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { register, authorization, updateTokens, test } = require('../controllers/auth.controller');
+const { register, authorization, updateTokens, checkToken } = require('../controllers/auth.controller');
 const {
   body_User_Name,
   body_User_Lastname,
@@ -13,6 +13,8 @@ const {
   body_UserSessions_Fingerprint,
   body_UserSessions_RefreshToken
 } = require('../../services/apiValidations');
+const { authUser } = require('../../middlewares/auth.middleware');
+
 
 router.post(
   '/register',
@@ -47,11 +49,12 @@ router.put(
     body_UserSessions_Fingerprint()
   ],
   updateTokens
-)
+);
 
 router.get(
-  '/test',
-  test
-)
+  '/checkToken',
+  authUser,
+  checkToken
+);
 
 module.exports = router;
