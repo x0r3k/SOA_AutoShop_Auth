@@ -23,6 +23,8 @@ router.get(
 
 router.get(
   '/getUser/:userId',
+  authUser,
+  authRole([3]),
   [ 
     param_User_Id()
   ],
@@ -31,6 +33,8 @@ router.get(
 
 router.delete(
   '/deleteUser/:userId',
+  authUser,
+  authRole([3]),
   [ 
     param_User_Id()
   ],
@@ -39,6 +43,8 @@ router.delete(
 
 router.put(
   '/updateUser/:userId',
+  authUser,
+  authRole([3]),
   [
     param_User_Id(),
     body_User_Name(false),
@@ -53,6 +59,8 @@ router.put(
 
 router.post(
   '/createUser',
+  authUser,
+  authRole([3]),
   [
     body_User_Email(true),
     body_User_Password(true),

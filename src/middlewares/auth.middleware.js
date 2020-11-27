@@ -13,16 +13,20 @@ async function authUser(req, res, next) {
     const token = req.headers.authorization.split(' ')[1];
     if(!token) return next(createError(formErrorObject(MAIN_ERROR_CODES.UNAUTHORIZED, 'Authorization header is in incorrect format')));
     
-    const tokenPayload = jwt.verify(token, JSONWebTokens.secret);
+    jwt.verify(token, JSONWebTokens.secret, async (error, tokenPayload) => {
+      if(error) {
+        return next(createError(formErrorObject(MAIN_ERROR_CODES.TOKEN_ERROR, 'Cannot get token payload', error)));
+      }
 
-    if(!tokenPayload) return next(createError(formErrorObject(MAIN_ERROR_CODES.TOKEN_ERROR, 'Cannot get token payload')));
+      const user = await users.findByPk(tokenPayload.userId);
+      if(!user) return next(createError(formErrorObject(MAIN_ERROR_CODES.ELEMENT_NOT_FOUND, 'User not found by token payload')));
+      
+      req.user = tokenPayload;
+      next();
+    });
 
     //Checking of access token (and storing of it in Db) is useless
-    const user = await users.findByPk(tokenPayload.userId);
-    if(!user) return next(createError(formErrorObject(MAIN_ERROR_CODES.ELEMENT_NOT_FOUND, 'User not found by token payload')));
     
-    req.user = tokenPayload;
-    next();
   } catch (error) {
     console.log(error);
     return next(createError(formErrorObject(MAIN_ERROR_CODES.TOKEN_ERROR, 'Token is not valid', error)));
