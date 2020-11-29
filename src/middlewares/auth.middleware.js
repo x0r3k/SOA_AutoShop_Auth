@@ -15,6 +15,9 @@ async function authUser(req, res, next) {
     
     jwt.verify(token, JSONWebTokens.secret, async (error, tokenPayload) => {
       if(error) {
+        if(error.name && error.name === 'TokenExpiredError') {
+          return next(createError(formErrorObject(MAIN_ERROR_CODES.TOKEN_ERROR, 'Token expired', error)));
+        }
         return next(createError(formErrorObject(MAIN_ERROR_CODES.TOKEN_ERROR, 'Cannot get token payload', error)));
       }
 
