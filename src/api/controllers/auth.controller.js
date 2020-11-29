@@ -212,7 +212,8 @@ module.exports = {
 
   checkToken: async (req, res, next) => {
     try {
-      if(req.user) return res.status(200).json({ user: req.user });
+      if(req.user) return res.status(200).json(req.user);
+      return next(createError(formErrorObject(MAIN_ERROR_CODES.UNAUTHORIZED, 'User payload not found')))
     } catch (error) {
       return next(createError(formErrorObject(MAIN_ERROR_CODES.SYSTEM_ERROR, 'Something went wrong, please try again')));
     }
