@@ -29,12 +29,32 @@ module.exports = {
       {
         id: 3,
         email: "user2@mail.com",
-        password: "123456",
+        password: "11AA__aa",
         name: "User2",
         fullname: "User2",
         gender: "NB",
         birthdate: 946684800000,
         city: 'Valky'
+      },
+      {
+        id: 4,
+        email: "user3@mail.com",
+        password: "11AA__aa",
+        name: "User3",
+        fullname: "User3",
+        gender: "F",
+        birthdate: 946684800000,
+        city: 'City'
+      },
+      {
+        id: 5,
+        email: "user4@mail.com",
+        password: "11AA__aa",
+        name: "User4",
+        fullname: "User4",
+        gender: "M",
+        birthdate: 946684800000,
+        city: 'Village'
       }
   ], {});
 

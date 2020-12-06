@@ -19,6 +19,16 @@ module.exports = {
         fkUserId: 3,
         fkRoleId: 3
       },
+      {
+        id: 4,
+        fkUserId: 4,
+        fkRoleId: 3
+      },
+      {
+        id: 5,
+        fkUserId: 5,
+        fkRoleId: 3
+      },
   ], {});
 
   },
