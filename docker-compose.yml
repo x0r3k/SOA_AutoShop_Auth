@@ -1,10 +1,12 @@
 version: '3'
 
 services:
-  db:
+  mysql:
     image: mysql:8.0.19
     container_name: auth_user_DBC
     command: --default-authentication-plugin=mysql_native_password
+    volumes:
+        - db_data:/var/lib/mysql
     environment:
         - MYSQL_DATABASE=soa_user
         - MYSQL_PASSWORD=0000
@@ -14,27 +16,28 @@ services:
       - "3380:3306"
     networks:
       - app-tier
+
   server:
     build:
       context: .
-      dockerfile: Dockerfile
     restart: on-failure
-    image: soa_auth_user
-    container_name: auth_user_SC
-    env_file: .env
     depends_on:
-        - db
+        - mysql
     environment:
-      - NODE_ENV=docker
-      - HTTP_PORT=8082
+      # NODE_ENV: docker
+      DB_HOST: mysql
+      DB_PORT: 3306
     ports:
       - "8082:8082"
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
+    # volumes:
+    #   - .:/usr/src/app
+    #   - /usr/src/app/node_modules
     networks:
       - app-tier
 
 networks:
     app-tier:
-        driver: bridge
+        # driver: bridge
+
+volumes:
+  db_data:
