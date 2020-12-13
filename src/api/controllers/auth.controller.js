@@ -76,7 +76,7 @@ module.exports = {
         return next(createError(formErrorObject(MAIN_ERROR_CODES.VALIDATION_BODY, 'Invalid request params', errors.errors)));
       } 
       const { email, password, fingerprint } = req.body;
-      const foundedUser = await users.findOne({
+      let foundedUser = await users.findOne({
         where: {
           email,
         },
@@ -90,6 +90,10 @@ module.exports = {
       if(!foundedUser || !bcrypt.compareSync(password, foundedUser.password)) {
         return next(createError(formErrorObject(MAIN_ERROR_CODES.ELEMENT_NOT_FOUND, 'Invalid email or password')));
       }
+
+      let user = {...foundedUser.dataValues };
+      delete user.password;
+
       const tokenPayload = {
         userId: foundedUser.id, 
         userEmail: foundedUser.email, 
@@ -139,7 +143,7 @@ module.exports = {
         }
       }
 
-      return res.status(200).json({accessToken: newAccessToken, refreshToken: newRefreshToken, expiresIn});
+      return res.status(200).json({accessToken: newAccessToken, refreshToken: newRefreshToken, expiresIn, user});
     } catch (error) {
       console.log(error);
       return next(createError(formErrorObject(MAIN_ERROR_CODES.SYSTEM_ERROR, 'Something went wrong, please try again')));
