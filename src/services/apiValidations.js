@@ -59,7 +59,8 @@ module.exports = {
       .isString().withMessage('Should be string')
       .isLength({ max: 50 }).withMessage('Max length is 50 symbols')
       .isLength({ min: 8 }).withMessage('Min length is 8 symbols')
-      .custom(value => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&_])[A-Za-z\d@$!%*?&_]{8,50}$/.test(value) ? true : false)
+      .custom(value => /^[a-zA-Z0-9]{8,50}$/.test(value) ? true : false)
+      // .custom(value => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&_])[A-Za-z\d@$!%*?&_]{8,50}$/.test(value) ? true : false)
       .withMessage('Wrong format');
   },
   body_ConfirmationPassword: () => {

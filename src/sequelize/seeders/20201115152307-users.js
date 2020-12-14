@@ -7,7 +7,7 @@ module.exports = {
       {
         id: 1,
         email: "admin@mail.com",
-        password: "123456",
+        password: "111aaaAAA",
         name: "Admin",
         lastname: "Admin",
         fullname: "Admin Admin",
@@ -18,7 +18,7 @@ module.exports = {
       {
         id: 2,
         email: "user1@mail.com",
-        password: "123456",
+        password: "111aaaAAA",
         name: "User1",
         lastname: "Test",
         fullname: "User1 Test",
@@ -29,7 +29,7 @@ module.exports = {
       {
         id: 3,
         email: "user2@mail.com",
-        password: "11AA__aa",
+        password: "111aaaAAA",
         name: "User2",
         fullname: "User2",
         gender: "NB",
@@ -39,7 +39,7 @@ module.exports = {
       {
         id: 4,
         email: "user3@mail.com",
-        password: "11AA__aa",
+        password: "111aaaAAA",
         name: "User3",
         fullname: "User3",
         gender: "F",
@@ -49,7 +49,7 @@ module.exports = {
       {
         id: 5,
         email: "user4@mail.com",
-        password: "11AA__aa",
+        password: "111aaaAAA",
         name: "User4",
         fullname: "User4",
         gender: "M",

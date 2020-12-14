@@ -25,7 +25,7 @@ module.exports = {
         return next(createError(formErrorObject(MAIN_ERROR_CODES.ELEMENT_EXISTS, 'User with this email already exists')));
       }
       let userRolesData = [];
-      const fullname = `${name || foundedUser.name} ${lastname || foundedUser.lastname}`;
+      const fullname = `${name} ${lastname || ''}`.trim();
       const createdUser = await users.create({
         email, 
         password: bcrypt.hashSync(password, 10),

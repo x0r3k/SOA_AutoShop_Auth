@@ -23,7 +23,7 @@ router.post(
     body_User_Password(true),
     body_ConfirmationPassword(),
     body_User_Name(true),
-    body_User_Lastname(true),
+    body_User_Lastname(false),
     body_User_Gender(true),
     body_User_Birthdate(true),
     body_User_City(true),
